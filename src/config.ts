@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 export const config = {
   api: {
-    port: process.env.API_PORT || 3000,
+    port: process.env.PORT || 3000,
   },
   bot: {
     token: process.env.BOT_TOKEN,
