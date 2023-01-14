@@ -25,6 +25,8 @@ export class SheetsRepository {
   }
 
   public async updateTable(): Promise<void> {
+    console.log('Updating table...');
+    
     const protocolTables = await Promise.all(
       gids.map(async (gid) => {
         try {
@@ -32,7 +34,8 @@ export class SheetsRepository {
           const data = await response.text();
 
           const result: TableRow[] = await csvtojson().fromString(data);
-
+          console.log("result: ", result[0]);
+          
           return result;
         } catch (e) {
           console.log(e);
