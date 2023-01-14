@@ -1,15 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { defaultMessage } from './constants';
-import { google } from 'googleapis';
-import csv from 'csvtojson';
 import { SheetsService } from 'src/sheets/sheets.service';
-import { TelegramContext } from './types';
 
 @Injectable()
 export class TelegramService {
   constructor(
     @Inject(SheetsService) private readonly sheetsService: SheetsService,
-  ) {}
+  ) { }
 
   getStart(): string {
     return defaultMessage.start;
@@ -58,10 +55,21 @@ export class TelegramService {
           responseText =
             `№ договора: ${idAgree}, № заявки: ${idIssue} \n\n` +
             res?.[idIssue]
-              .map(
-                ({ dateOfIssue, sampleType }) =>
-                  `Дата выдачи протокола (${sampleType}): ${dateOfIssue}`,
-              )
+              .map(({ dateOfIssue, sampleType }) => {
+                let date = 'Не известно';
+
+                if (dateOfIssue) {
+                  const newDate = new Date(dateOfIssue);
+                  newDate.setDate(new Date(dateOfIssue).getDate() + 1);
+                  date = newDate.toLocaleString('ru', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    weekday: 'long',
+                  });
+                }
+                return `Дата выдачи протокола (${sampleType}): ${date}`;
+              })
               .join('\n ---------------------------------------- \n');
         }
       }
