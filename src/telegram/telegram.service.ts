@@ -6,7 +6,7 @@ import { SheetsService } from 'src/sheets/sheets.service';
 export class TelegramService {
   constructor(
     @Inject(SheetsService) private readonly sheetsService: SheetsService,
-  ) { }
+  ) {}
 
   getStart(): string {
     return defaultMessage.start;
@@ -21,10 +21,18 @@ export class TelegramService {
     if (contractId.match(regex)) {
       const res = await this.sheetsService.getAppListByContractId(contractId);
       if (!res) {
-        return ['Нет данных по этому номеру договора', undefined];
+        return [
+          `Возможно, номер договора еще не был внесен в систему. Можете попробовать по позже либо, свяжитесь с нами:
+        Телефон: +7 (921) 186-92-08;
+        E-mail: lab@regionlab.pro`,
+          undefined,
+        ];
       } else {
         return [
-          `Выберите номер заявки для договора ${contractId}`,
+          `Выберите номер заявки для договора ${contractId}.
+          Нет нужного? Возможно, номер заявки еще не был внесен в систему. Можете попробовать по позже либо, свяжитесь с нами:
+          Телефон: +7 (921) 186-92-08;
+          E-mail: lab@regionlab.pro`,
           {
             reply_markup: {
               inline_keyboard: Object.keys(res || {}).map((idIssue) => [
@@ -38,7 +46,10 @@ export class TelegramService {
         ];
       }
     } else {
-      return ['Неверный формат', undefined];
+      return [
+        'Проверьте пожалуйста правильность введенного формата номера договора (пример: 147-22)',
+        undefined,
+      ];
     }
   }
 
@@ -56,11 +67,12 @@ export class TelegramService {
             `№ договора: ${idAgree}, № заявки: ${idIssue} \n\n` +
             res?.[idIssue]
               .map(({ dateOfIssue, sampleType }) => {
-                let date = 'Не известно';
+                let date =
+                  'Возможно, дата еще не определена, либо свяжитесь с нами для уточнения';
 
                 if (dateOfIssue) {
                   const newDate = new Date(dateOfIssue);
-                  newDate.setDate(new Date(dateOfIssue).getDate() + 1);
+                  newDate.setDate(new Date(dateOfIssue).getDate());
                   date = newDate.toLocaleString('ru', {
                     year: 'numeric',
                     month: 'long',
