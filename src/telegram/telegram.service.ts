@@ -66,8 +66,11 @@ export class TelegramService {
                   'Возможно, дата еще не определена, либо свяжитесь с нами для уточнения';
 
                 if (dateOfIssue) {
-                  const newDate = new Date(dateOfIssue);
-                  newDate.setDate(new Date(dateOfIssue).getDate());
+                  const [day, month, year] = dateOfIssue
+                    .split('.')
+                    .map((item) => +item);
+                  const newDate = new Date(year, month, day);
+
                   date = newDate.toLocaleString('ru', {
                     year: 'numeric',
                     month: 'long',
