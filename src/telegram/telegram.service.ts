@@ -71,7 +71,7 @@ export class TelegramService {
                     .map((item) => +item);
                   const newDate = new Date(year, month, day);
 
-                  if (newDate.getDay() === 5) {
+                  if (newDate.getDay() === 6) {
                     newDate.setDate(newDate.getDate() + 2);
                   }
 
