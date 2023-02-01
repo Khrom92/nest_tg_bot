@@ -6,7 +6,7 @@ import { SheetsService } from 'src/sheets/sheets.service';
 export class TelegramService {
   constructor(
     @Inject(SheetsService) private readonly sheetsService: SheetsService,
-  ) {}
+  ) { }
 
   getStart(): string {
     return defaultMessage.start;
@@ -71,6 +71,13 @@ export class TelegramService {
                     .map((item) => +item);
                   const newDate = new Date(year, month, day);
 
+                  if (newDate.getDay() === 5) {
+                    newDate.setDate(newDate.getDate() + 2);
+                  }
+
+                  if (newDate.getDay() === 7) {
+                    newDate.setDate(newDate.getDate() + 1);
+                  }
                   date = newDate.toLocaleString('ru', {
                     year: 'numeric',
                     month: 'long',
