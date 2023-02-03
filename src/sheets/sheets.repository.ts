@@ -57,7 +57,7 @@ export class SheetsRepository {
         [appId]: [
           ...(protocolMap?.[contractId]?.[appId] || []),
           {
-            dateOfIssue: row['Выдача протокола факт.'] || null,
+            dateOfIssue: row['Анализ ДО вкл-но'] || null,
             sampleType: row['Тип пробы'],
           },
         ],
