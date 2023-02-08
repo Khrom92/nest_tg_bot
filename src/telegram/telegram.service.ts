@@ -17,20 +17,26 @@ export class TelegramService {
   }
 
   async getContractList(contractId: string): Promise<[string, any]> {
-    const regex = /^[a-zA-Z0-9]+-[a-zA-Z0-9]+$/;
-    if (contractId.match(regex)) {
-      const res = await this.sheetsService.getAppListByContractId(contractId);
-      if (!res) {
+    // const regex = /^[a-zA-Z0-9]+-[a-zA-Z0-9]+$/;
+    if (/\d/.test(contractId)) {
+      const res = this.sheetsService.getAppListByContractId(contractId);
+      const issue = res?.contractInfo;
+      const labels = res?.labels;
+      console.log('issue: ', issue);
+
+      if (!issue) {
         return [
           `Возможно, номер договора еще не был внесен в систему. Можете попробовать по позже либо, свяжитесь с нами: \nТелефон: +7 (921) 186-92-08; \nE-mail: lab@regionlab.pro`,
           undefined,
         ];
       } else {
+        console.log(Object.keys(issue || {}));
+
         return [
-          `Выберите номер заявки для договора ${contractId}.Нет нужного? Возможно, номер заявки еще не был внесен в систему. Можете попробовать по позже либо, свяжитесь с нами: \nТелефон: +7 (921) 186-92-08; \nE-mail: lab@regionlab.pro`,
+          `Выберите ${labels[1]} для ${labels[0]} ${contractId}. Нет нужного? Возможно, номер заявки еще не был внесен в систему. Можете попробовать по позже либо, свяжитесь с нами: \nТелефон: +7 (921) 186-92-08; \nE-mail: lab@regionlab.pro`,
           {
             reply_markup: {
-              inline_keyboard: Object.keys(res || {}).map((idIssue) => [
+              inline_keyboard: Object.keys(issue || {}).map((idIssue) => [
                 {
                   text: `Номер заявки - ${idIssue}`,
                   callback_data: `click|${contractId}|${idIssue}`,
@@ -55,17 +61,24 @@ export class TelegramService {
     try {
       if (event === 'click') {
         const res = await this.sheetsService.getAppListByContractId(idAgree);
-        if (res?.[idIssue]) {
-          console.log(res?.[idIssue]);
+
+        const issue = res?.contractInfo?.[idIssue];
+        const labels = res?.labels;
+        if (issue) {
+          console.log(res?.contractInfo?.[idIssue]);
 
           responseText =
-            `№ договора: ${idAgree}, № заявки: ${idIssue} \n\n` +
-            res?.[idIssue]
+            `${labels[0]}: ${idAgree}, ${labels[1]}: ${idIssue} \n\n` +
+            issue
               .map(({ dateOfIssue, sampleType }) => {
-                let date =
-                  'Возможно, дата еще не определена, либо свяжитесь с нами для уточнения';
+                let date = dateOfIssue
+                  ? dateOfIssue
+                  : 'Возможно, дата еще не определена, либо свяжитесь с нами для уточнения';
 
-                if (dateOfIssue) {
+                if (
+                  dateOfIssue &&
+                  new Date(dateOfIssue).toString() !== 'Invalid Date'
+                ) {
                   // const [day, month, year] = dateOfIssue
                   //   .split('.')
                   //   .map((item) => +item);

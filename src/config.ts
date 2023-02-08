@@ -10,6 +10,7 @@ export const config = {
   },
   sheets: {
     link: process.env.SHEETS_LINK,
-    gids: process.env.GIDS.split(', '),
+    IN_WORK_GID: process.env.IN_WORK_GID,
+    TT_IN_WORK_GID: process.env.TT_IN_WORK_GID,
   },
 };

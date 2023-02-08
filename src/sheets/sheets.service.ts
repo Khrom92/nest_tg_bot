@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { SheetsRepository } from './sheets.repository';
 
@@ -13,7 +13,7 @@ export class SheetsService {
     console.log(' init Table ');
   }
 
-  public async getAppListByContractId(contractId: string) {
+  public getAppListByContractId(contractId: string) {
     return this.sheetsRepository.getByContractId(contractId);
   }
 
