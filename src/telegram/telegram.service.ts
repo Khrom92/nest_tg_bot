@@ -75,29 +75,28 @@ export class TelegramService {
                   ? dateOfIssue
                   : 'Возможно, дата еще не определена, либо свяжитесь с нами для уточнения';
 
-                if (
-                  dateOfIssue &&
-                  new Date(dateOfIssue).toString() !== 'Invalid Date'
-                ) {
-                  // const [day, month, year] = dateOfIssue
-                  //   .split('.')
-                  //   .map((item) => +item);
-                  const newDate = new Date(dateOfIssue);
-                  newDate.setDate(newDate.getDate() + 1);
-
-                  if (newDate.getDay() === 6) {
-                    newDate.setDate(newDate.getDate() + 2);
-                  }
-
-                  if (newDate.getDay() === 7) {
+                if (dateOfIssue) {
+                  const [day, month, year] = dateOfIssue
+                    .split('.')
+                    .map((item) => +item);
+                  const newDate = new Date(year, month, day);
+                  if (newDate.toDateString() !== 'Invalid Date') {
                     newDate.setDate(newDate.getDate() + 1);
+
+                    if (newDate.getDay() === 6) {
+                      newDate.setDate(newDate.getDate() + 2);
+                    }
+
+                    if (newDate.getDay() === 7) {
+                      newDate.setDate(newDate.getDate() + 1);
+                    }
+                    date = newDate.toLocaleString('ru', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      weekday: 'long',
+                    });
                   }
-                  date = newDate.toLocaleString('ru', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    weekday: 'long',
-                  });
                 }
                 return `Дата выдачи протокола (${sampleType}): ${date}`;
               })
