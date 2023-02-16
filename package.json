@@ -26,6 +26,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/schedule": "^2.1.0",
     "csvtojson": "^2.0.10",
+    "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
     "googleapis": "^110.0.0",
     "nestjs-telegraf": "^2.6.3",

@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { defaultMessage } from './constants';
 import { SheetsService } from 'src/sheets/sheets.service';
+import { addDays, getDay, format, parse } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 @Injectable()
 export class TelegramService {
@@ -75,32 +77,26 @@ export class TelegramService {
                   ? dateOfIssue
                   : 'Возможно, дата еще не определена, либо свяжитесь с нами для уточнения';
 
-                if (dateOfIssue) {
-                  const [day, month, year] = dateOfIssue
-                    .split('.')
-                    .map((item) => +item);
-                  const newDate = new Date(year, month, day);
-                  if (newDate.toDateString() !== 'Invalid Date') {
-                    newDate.setDate(newDate.getDate() + 1);
+                let newDate = parse(dateOfIssue, 'dd.MM.yyyy', new Date());
+                if (newDate.toDateString() !== 'Invalid Date') {
+                  newDate = addDays(newDate, 1);
 
-                    if (newDate.getDay() === 6) {
-                      newDate.setDate(newDate.getDate() + 2);
-                    }
-
-                    if (newDate.getDay() === 7) {
-                      newDate.setDate(newDate.getDate() + 1);
-                    }
-                    date = newDate.toLocaleString('ru', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      weekday: 'long',
-                    });
+                  if (getDay(newDate) === 6) {
+                    newDate = addDays(newDate, 2);
                   }
+
+                  if (getDay(newDate) === 0) {
+                    newDate = addDays(newDate, 1);
+                  }
+
+                  date = format(newDate, 'EEEE, d MMMM yyyy', {
+                    locale: ru,
+                  });
                 }
-                return `Дата выдачи протокола (${sampleType}): ${date}`;
+
+                return `Дата выдачи протокола (${sampleType}): <b>${date}</b>`;
               })
-              .join('\n ---------------------------------------- \n');
+              .join('\n                             \n');
         }
       }
     } catch (error) {

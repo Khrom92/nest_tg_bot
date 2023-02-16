@@ -6,7 +6,7 @@ import { TelegramContext } from './types';
 
 @Update()
 export class TelegramUpdate {
-  constructor(private readonly telegramService: TelegramService) {}
+  constructor(private readonly telegramService: TelegramService) { }
 
   @Start()
   async start(@Ctx() ctx: Context) {
@@ -41,6 +41,7 @@ export class TelegramUpdate {
     if (ctx.callbackQuery?.data) {
       await ctx.reply(
         await this.telegramService.getCallbackResp(ctx.callbackQuery?.data),
+        { parse_mode: 'HTML' },
       );
     }
   }
