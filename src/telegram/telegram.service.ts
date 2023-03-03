@@ -8,7 +8,7 @@ import { ru } from 'date-fns/locale';
 export class TelegramService {
   constructor(
     @Inject(SheetsService) private readonly sheetsService: SheetsService,
-  ) { }
+  ) {}
 
   getStart(): string {
     return defaultMessage.start;
@@ -73,11 +73,19 @@ export class TelegramService {
             `${labels[0]}: ${idAgree}, ${labels[1]}: ${idIssue} \n\n` +
             issue
               .map(({ dateOfIssue, sampleType }) => {
-                let date = dateOfIssue
-                  ? dateOfIssue
-                  : 'Возможно, дата еще не определена, либо свяжитесь с нами для уточнения';
+                let date =
+                  dateOfIssue !== '-'
+                    ? dateOfIssue
+                    : 'Возможно, дата еще не определена, либо свяжитесь с нами для уточнения';
+                let newDate: Date | string = date;
+                const isEngDate = dateOfIssue.includes('/');
 
-                let newDate = parse(dateOfIssue, 'dd.MM.yyyy', new Date());
+                if (isEngDate) {
+                  newDate = parse(dateOfIssue, 'MM/dd/yyyy', new Date());
+                } else {
+                  newDate = parse(dateOfIssue, 'dd.MM.yyyy', new Date());
+                }
+
                 if (newDate.toDateString() !== 'Invalid Date') {
                   newDate = addDays(newDate, 1);
 

@@ -18,13 +18,13 @@ export class SheetsRepository {
     if (this.protocolMapInWork[contractId]) {
       return {
         contractInfo: this.protocolMapInWork[contractId],
-        labels: ['№ заявки', 'договора №'],
+        labels: ['договора №', '№ заявки'],
       };
     }
     if (this.protocolMapTTinWork[contractId]) {
       return {
         contractInfo: this.protocolMapTTinWork[contractId],
-        labels: ['№ заказа', 'заявки №'],
+        labels: ['№ заявки', 'заказа №'],
       };
     }
     return null;
