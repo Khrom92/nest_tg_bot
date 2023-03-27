@@ -42,7 +42,7 @@ export class TelegramService {
             reply_markup: {
               inline_keyboard: Object.keys(issue || {}).map((idIssue) => [
                 {
-                  text: `Номер заявки - ${idIssue}`,
+                  text: `${labels[1]} - ${idIssue}`,
                   callback_data: `click|${contractId}|${idIssue}`,
                 },
               ]),
