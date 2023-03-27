@@ -10,6 +10,7 @@ export type ProtocolMap = {
 export type ContractWithLabels = {
   contractInfo: ProtocolMap[string];
   labels: [string, string];
+  firstLineText: string;
 };
 
 export type TableRow = {

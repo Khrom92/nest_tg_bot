@@ -18,13 +18,15 @@ export class SheetsRepository {
     if (this.protocolMapInWork[contractId]) {
       return {
         contractInfo: this.protocolMapInWork[contractId],
-        labels: ['договора №', '№ заявки'],
+        labels: ['№ договора ', '№ заявки'],
+        firstLineText: 'Выберите номер заявки для договора №',
       };
     }
     if (this.protocolMapTTinWork[contractId]) {
       return {
         contractInfo: this.protocolMapTTinWork[contractId],
-        labels: ['№ заявки', 'заказа №'],
+        labels: ['№ заявки', '№ заказа'],
+        firstLineText: 'Выберите номер заказа для заявки №',
       };
     }
     return null;

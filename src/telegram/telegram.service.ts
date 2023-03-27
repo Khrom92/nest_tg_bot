@@ -24,18 +24,20 @@ export class TelegramService {
       const res = this.sheetsService.getAppListByContractId(contractId);
       const issue = res?.contractInfo;
       const labels = res?.labels;
+      const firstLineText = res?.firstLineText;
+
       console.log('issue: ', issue);
 
       if (!issue) {
         return [
-          `Возможно, номер договора еще не был внесен в систему. Можете попробовать по позже либо, свяжитесь с нами: \nТелефон: +7 (921) 186-92-08; \nE-mail: lab@regionlab.pro`,
+          `Возможно, номер договора еще не был внесен в систему. Можете попробовать попозже, либо свяжитесь с нами: \nТелефон: +7 (921) 186-92-08; \nE-mail: lab@regionlab.pro`,
           undefined,
         ];
       } else {
         console.log(Object.keys(issue || {}));
 
         return [
-          `Выберите ${labels[1]} для ${labels[0]} ${contractId}. Нет нужного? Возможно, номер заявки еще не был внесен в систему. Можете попробовать по позже либо, свяжитесь с нами: \nТелефон: +7 (921) 186-92-08; \nE-mail: lab@regionlab.pro`,
+          `${firstLineText} ${contractId}. Нет нужного? Возможно, номер заявки еще не был внесен в систему. Можете попробовать попозже, либо свяжитесь с нами: \nТелефон: +7 (921) 186-92-08; \nE-mail: lab@regionlab.pro`,
           {
             reply_markup: {
               inline_keyboard: Object.keys(issue || {}).map((idIssue) => [
