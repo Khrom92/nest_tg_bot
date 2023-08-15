@@ -82,7 +82,7 @@ export class TelegramService {
                 let newDate: Date | string = date;
                 const isEngDate = dateOfIssue?.includes('/');
 
-                if (isEngDate) {
+                if (isEngDate && dateOfIssue) {
                   newDate = parse(dateOfIssue, 'MM/dd/yyyy', new Date());
                 } else {
                   newDate = parse(dateOfIssue, 'dd.MM.yyyy', new Date());
