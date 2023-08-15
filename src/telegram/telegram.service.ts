@@ -80,7 +80,7 @@ export class TelegramService {
                     ? dateOfIssue
                     : 'Возможно, дата еще не определена, либо свяжитесь с нами для уточнения';
                 let newDate: Date | string = date;
-                const isEngDate = dateOfIssue.includes('/');
+                const isEngDate = dateOfIssue?.includes('/');
 
                 if (isEngDate) {
                   newDate = parse(dateOfIssue, 'MM/dd/yyyy', new Date());
