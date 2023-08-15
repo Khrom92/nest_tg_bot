@@ -76,7 +76,7 @@ export class TelegramService {
             issue
               .map(({ dateOfIssue, sampleType }) => {
                 let date =
-                  dateOfIssue !== '-' || !dateOfIssue
+                  dateOfIssue !== '-' && dateOfIssue
                     ? dateOfIssue
                     : 'Возможно, дата еще не определена, либо свяжитесь с нами для уточнения';
                 let newDate: Date | string = date;
